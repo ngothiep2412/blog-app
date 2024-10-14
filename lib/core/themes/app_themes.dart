@@ -7,7 +7,7 @@ class AppThemes {
 
   static final light = ThemeData(
     colorScheme: ColorScheme.fromSeed(seedColor: MyColors.primaryColor),
-    useMaterial3: true,
+    useMaterial3: false,
     fontFamily: GoogleFonts.poppins().fontFamily,
   );
 
