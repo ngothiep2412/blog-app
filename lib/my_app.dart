@@ -1,22 +1,9 @@
 import 'package:blog_app/core/constants/my_strings.dart';
 import 'package:blog_app/core/themes/app_themes.dart';
-import 'package:blog_app/data/repositories/repository.dart';
-import 'package:blog_app/data/repositories/tags_repo.dart';
 import 'package:blog_app/presentation/router/router_imports.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-void main() {
-  runApp(
-    RepositoryProvider(
-      create: (context) => Repository(
-        tagsRepo: TagsRepo(),
-      ),
-      child: MyApp(),
-    ),
-  );
-}
+import 'package:flutter_flavor/flutter_flavor.dart';
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
@@ -31,11 +18,16 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       useInheritedMediaQuery: true,
       builder: (context, child) {
-        return MaterialApp.router(
-          title: MyStrings.appName,
-          theme: AppThemes.light,
-          darkTheme: AppThemes.dark,
-          routerConfig: _appRouter.config(),
+        return FlavorBanner(
+          color: FlavorConfig.instance.variables['primaryColor'],
+          location: BannerLocation.bottomEnd,
+          child: MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            title: MyStrings.appName,
+            theme: AppThemes.light,
+            darkTheme: AppThemes.dark,
+            routerConfig: _appRouter.config(),
+          ),
         );
       },
     );

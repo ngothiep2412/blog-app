@@ -10,7 +10,8 @@ class TagsRepo extends ApiClient {
 
   Future<TagsModel> getAllTags() async {
     try {
-      final response = await getRequest(path: ApiEndpointUrls.tags);
+      final response =
+          await getRequest(path: ApiEndpointUrls.tags, isTokenRequired: false);
 
       if (response.statusCode == 200) {
         //* 1st solution

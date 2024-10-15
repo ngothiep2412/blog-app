@@ -22,10 +22,15 @@ class _TagsState extends State<Tags> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyColors.primaryColor,
-        title: "Tags".text.size(16.sp).make(),
+        title: "Tags".text.size(16.sp).bold.white.make(),
         automaticallyImplyLeading: false,
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(FeatherIcons.plus))
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                FeatherIcons.plus,
+                color: Colors.white,
+              ))
         ],
       ),
       body: BlocBuilder<VelocityBloc<TagsModel>, VelocityState<TagsModel>>(

@@ -16,10 +16,11 @@ class _SplashState extends State<Splash> {
   }
 
   void moveToOnboard() async {
-    await Future.delayed(const Duration(seconds: 4), () {
-      AutoRouter.of(context).push(
-        const OnboardRoute(),
-      );
+    await Future.delayed(const Duration(seconds: 2), () {
+      Utils.manipulateLogin(context);
+      // AutoRouter.of(context).push(
+      //   const OnboardRoute(),
+      // );
     });
   }
 

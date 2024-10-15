@@ -1,5 +1,6 @@
 import 'package:blog_app/data/data_source/remote/api_constant.dart';
 import 'package:blog_app/data/data_source/remote/api_exception.dart';
+import 'package:blog_app/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 // import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -15,7 +16,18 @@ class ApiClient {
     dio = Dio(baseOptions);
   }
 
-  Future<Response> getRequest({required String path}) async {
+  Options options = Options();
+
+  Future<Response> getRequest(
+      {required String path, required bool isTokenRequired}) async {
+    if (isTokenRequired) {
+      var token = await Utils.getToken();
+
+      options.headers = baseOptions.headers
+        ..addAll({
+          "Authorization": "Bearer $token",
+        });
+    }
     // dio.interceptors.add(PrettyDioLogger());
 
     try {
@@ -23,7 +35,7 @@ class ApiClient {
           "🚀======================API REQUEST==========================🚀");
       debugPrint("Request Url: ${baseOptions.baseUrl + path}");
 
-      var response = await dio.get(path);
+      var response = await dio.get(path, options: options);
       debugPrint(
           "🔥======================API RESPONSE==========================🔥");
 
@@ -46,11 +58,12 @@ class ApiClient {
   }
 
   // POST REQUEST
-  Future<Response> postRequest(
-      {required String path, required Map<String, dynamic> body}) async {
+  Future<Response> postRequest({required String path, dynamic body}) async {
+    var token = await Utils.getToken();
+
     final options = Options(
       headers: {
-        'Authorization': 'Bearer ',
+        'Authorization': 'Bearer $token',
       },
     );
 
@@ -72,7 +85,7 @@ class ApiClient {
       return response;
     } on DioException catch (e) {
       if (e.response != null) {
-        debugPrint(e.response!.data);
+        debugPrint(e.response!.data.toString());
         debugPrint(e.response!.headers.toString());
         debugPrint(e.response!.requestOptions.toString());
         throw ApiException(message: e.response!.statusMessage);

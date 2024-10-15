@@ -13,10 +13,16 @@ class _CategoriesState extends State<Categories> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyColors.primaryColor,
-        title: "Categories".text.size(16.sp).make(),
+        title: "Categories".text.size(16.sp).bold.white.make(),
         automaticallyImplyLeading: false,
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(FeatherIcons.plus))
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              FeatherIcons.plus,
+              color: Colors.white,
+            ),
+          )
         ],
       ),
       body: ListView.separated(

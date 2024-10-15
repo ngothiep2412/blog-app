@@ -40,7 +40,13 @@ class _OnboardState extends State<Onboard> {
               ).expand(),
               61.h.heightBox,
               PrimaryButton(
-                onPressed: () => AutoRouter.of(context).push(const AuthRoute()),
+                onPressed: () async {
+                  // final SharedPreferences preferences =
+                  //     await SharedPreferences.getInstance();
+                  // String token = preferences.getString("token") ?? "";
+                  // Vx.log(token);
+                  AutoRouter.of(context).push(const AuthRoute());
+                },
                 title: "Get started",
               ),
               61.h.heightBox,
@@ -51,7 +57,7 @@ class _OnboardState extends State<Onboard> {
                   SmoothPageIndicator(
                     controller: viewModel.pageController,
                     count: 3,
-                    effect: const WormEffect(
+                    effect: WormEffect(
                       activeDotColor: MyColors.primaryColor,
                       dotWidth: 8,
                       dotHeight: 8,

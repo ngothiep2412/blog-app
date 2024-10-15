@@ -8,82 +8,139 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  late HomeViewModel homeViewModel;
+
+  @override
+  void initState() {
+    homeViewModel = HomeViewModel(repository: context.read<Repository>());
+    homeViewModel.fetchAllPosts();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Column(
-            children: [
-              Image.asset(MyAssets.assetsImagesNetflix).cornerRadius(20.r),
-              20.h.heightBox,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  "Latest Posts".text.make(),
-                  "See All".text.make(),
-                ],
-              ),
-              20.h.heightBox,
-              ListView.separated(
-                  itemCount: 5,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  separatorBuilder: (context, index) => SizedBox(
+        child: BlocBuilder<VelocityBloc<HomeModel>, VelocityState<HomeModel>>(
+          bloc: homeViewModel.postsBloc,
+          builder: (context, state) {
+            if (state is VelocityInitialState) {
+              return const Center(
+                child: CircularProgressIndicator.adaptive(),
+              );
+            } else if (state is VelocityUpdateState) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    VxSwiper.builder(
+                      autoPlay: true,
+                      enableInfiniteScroll: true,
+                      itemCount: state.data.popularPosts!.length,
+                      itemBuilder: (context, index) {
+                        var latestPosts = state.data.allPosts![index];
+                        var imagePath = latestPosts.featuredimage
+                            .toString()
+                            .replaceAll('public', 'storage');
+                        return CachedImageWidget(
+                          imgUrl: imagePath,
+                          imgWidth: 500.w,
+                          boxFit: BoxFit.cover,
+                        ).cornerRadius(20.r).pSymmetric(h: 10.w);
+                      },
+                    ),
+                    20.h.heightBox,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        "Latest Posts".text.make(),
+                        "See All".text.make(),
+                      ],
+                    ).pSymmetric(h: 24.w),
+                    20.h.heightBox,
+                    ListView.separated(
+                      padding: EdgeInsets.symmetric(horizontal: 24.w),
+                      itemCount: state.data.allPosts!.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      separatorBuilder: (context, index) => SizedBox(
                         height: 20.h,
                       ),
-                  itemBuilder: (context, index) {
-                    return Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () => AutoRouter.of(context).push(
-                            const HomeDetailsRoute(),
+                      itemBuilder: (context, index) {
+                        var latestPosts = state.data.allPosts![index];
+                        var imagePath = latestPosts.featuredimage
+                            .toString()
+                            // .prepend('https://techblog.codersangam.com/')
+                            .replaceAll("public", "storage");
+                        return FadedScaleAnimation(
+                          fadeCurve: Curves.easeInCubic,
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () => AutoRouter.of(context).push(
+                                  HomeDetailsRoute(
+                                      post: latestPosts, imagePath: imagePath),
+                                ),
+                                child: Hero(
+                                  tag: Key(latestPosts.id!.toString()),
+                                  child: CachedImageWidget(
+                                    imgUrl: imagePath,
+                                    imgWidth: 180.w,
+                                    imgHeight: 120.h,
+                                    boxFit: BoxFit.cover,
+                                  ).cornerRadius(20.r),
+                                ),
+                              ),
+                              10.w.widthBox,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  latestPosts.title!.text
+                                      .size(16.sp)
+                                      .maxLines(2)
+                                      .bold
+                                      .make(),
+                                  6.h.heightBox,
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        FeatherIcons.clock,
+                                      ),
+                                      8.horizontalSpace,
+                                      latestPosts.createdAt!
+                                          .timeAgo()
+                                          .toString()
+                                          .text
+                                          .ellipsis
+                                          .maxLines(2)
+                                          .make()
+                                          .expand(),
+                                    ],
+                                  ),
+                                  6.h.heightBox,
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      "${latestPosts.views} Views".text.make(),
+                                      const Icon(
+                                        FeatherIcons.bookmark,
+                                      ),
+                                    ],
+                                  ),
+                                  6.h.heightBox,
+                                ],
+                              ).expand()
+                            ],
                           ),
-                          child: Image.asset(
-                            MyAssets.assetsImagesNetflix,
-                            width: 180.w,
-                            height: 120.h,
-                            fit: BoxFit.cover,
-                          ).cornerRadius(20.r),
-                        ),
-                        10.w.widthBox,
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            "Netflix Will Charge Money for Password Sharing"
-                                .text
-                                .size(16.sp)
-                                .maxLines(2)
-                                .bold
-                                .make(),
-                            6.h.heightBox,
-                            Row(
-                              children: [
-                                const Icon(
-                                  FeatherIcons.clock,
-                                ),
-                                "6 Months ago".text.make(),
-                              ],
-                            ),
-                            6.h.heightBox,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                "59 Views".text.make(),
-                                const Icon(
-                                  FeatherIcons.bookmark,
-                                ),
-                              ],
-                            ),
-                            6.h.heightBox,
-                          ],
-                        ).expand()
-                      ],
-                    );
-                  })
-            ],
-          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              );
+            }
+            return const SizedBox.shrink();
+          },
         ),
       ),
     );

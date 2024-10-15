@@ -27,7 +27,7 @@ class _GeneralState extends State<General> {
       // title: 'Cart',
     ),
     const TabItem(
-      icon: FeatherIcons.userX,
+      icon: FeatherIcons.user,
       // title: 'profile',
     ),
   ];

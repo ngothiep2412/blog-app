@@ -37,7 +37,7 @@ class _AddPostsState extends State<AddPosts> {
               ),
               IconButton(
                 onPressed: () {},
-                icon: const Icon(
+                icon: Icon(
                   FeatherIcons.camera,
                   color: MyColors.primaryColor,
                 ),
