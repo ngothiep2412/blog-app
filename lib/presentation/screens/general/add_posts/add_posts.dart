@@ -182,7 +182,9 @@ class _AddPostsState extends State<AddPosts> {
           QuillToolbar.simple(
             configurations: QuillSimpleToolbarConfigurations(
               controller: addPostsViewModel.controller,
-              sharedConfigurations: const QuillSharedConfigurations(),
+              sharedConfigurations: QuillSharedConfigurations(
+                locale: I18n.locale,
+              ),
             ),
           ),
           SizedBox(

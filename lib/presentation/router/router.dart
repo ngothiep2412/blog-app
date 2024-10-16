@@ -20,5 +20,9 @@ class AppRouter extends $AppRouter {
         AutoRoute(page: UpdateTagsRoute.page),
         AutoRoute(page: AddCategoriesRoute.page),
         AutoRoute(page: UpdateCategoriesRoute.page),
+        CustomRoute(
+          page: LanguageRoute.page,
+          transitionsBuilder: TransitionsBuilders.fadeIn,
+        )
       ];
 }

@@ -15,6 +15,7 @@ class OnboardThird extends StatelessWidget {
           height: 333.h,
         ),
         'Explore a wide selection of categories, or use the search bar to find specific topics'
+            .i18n
             .text
             .size(15.sp)
             .align(TextAlign.center)

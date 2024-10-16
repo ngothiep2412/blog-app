@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:blog_app/presentation/router/router_imports.gr.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,7 +11,7 @@ class Utils {
     if (token != null) {
       AutoRouter.of(context).replace(const GeneralRoute());
     } else {
-      AutoRouter.of(context).replace(const AuthRoute());
+      AutoRouter.of(context).replace(const OnboardRoute());
     }
   }
 
@@ -27,5 +29,21 @@ class Utils {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
 
     preferences.clear();
+  }
+
+  static Future<void> saveLocale(Locale locale) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString("locale", locale.toString());
+  }
+
+  static Future<Locale> getLocale() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    var localeString = prefs.getString("locale");
+    switch (localeString) {
+      case 'en_US':
+        return const Locale('en', 'US');
+      default:
+        return const Locale('vi', 'VN');
+    }
   }
 }

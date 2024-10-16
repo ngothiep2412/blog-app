@@ -15,6 +15,7 @@ class OnboardFirst extends StatelessWidget {
           height: 333.h,
         ),
         'Discover, engage and read the latest articles as well as share your own thoughts and ideas with the community'
+            .i18n
             .text
             .size(15.sp)
             .align(TextAlign.center)
