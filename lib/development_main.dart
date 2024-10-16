@@ -1,4 +1,5 @@
 import 'package:blog_app/data/repositories/auth_repo.dart';
+import 'package:blog_app/data/repositories/categories_repo.dart';
 import 'package:blog_app/data/repositories/posts_repo.dart';
 import 'package:blog_app/data/repositories/repository.dart';
 import 'package:blog_app/data/repositories/tags_repo.dart';
@@ -21,6 +22,7 @@ void main() {
         tagsRepo: TagsRepo(),
         authRepo: AuthRepo(),
         postsRepo: PostsRepo(),
+        categoriesRepo: CategoriesRepo(),
       ),
       child: MyApp(),
     ),

@@ -62,10 +62,11 @@ class _ProfileState extends State<Profile> {
                       child: Column(
                         children: [
                           CircleAvatar(
-                            radius: 100.r,
-                            backgroundImage: NetworkImage(
-                              state.data.userDetails!.profilePhotoUrl
-                                  .toString(),
+                            radius: 70.r,
+                            backgroundImage: const NetworkImage(
+                              // state.data.userDetails!.profilePhotoUrl
+                              //     .toString(),
+                              "https://static.wikia.nocookie.net/bach-khoa-the-gioi-toan-thu/images/e/e4/Son_goku.png/revision/latest?cb=20211030082932",
                             ),
                           ),
                           10.h.heightBox,
@@ -75,6 +76,7 @@ class _ProfileState extends State<Profile> {
                               .bold
                               .xl2
                               .make(),
+                          20.h.heightBox,
                           state.data.userDetails!.email
                               .toString()
                               .text
