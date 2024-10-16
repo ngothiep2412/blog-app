@@ -1,8 +1,13 @@
 part of 'tags_imports.dart';
 
-@RoutePage()
+@RoutePage<Tag>()
 class Tags extends StatefulWidget {
-  const Tags({super.key});
+  const Tags({
+    super.key,
+    required this.navigationType,
+  });
+
+  final NavigationType navigationType;
 
   @override
   State<Tags> createState() => _TagsState();
@@ -24,8 +29,12 @@ class _TagsState extends State<Tags> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: MyColors.primaryColor,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
         title: "Tags".text.size(16.sp).bold.white.make(),
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading:
+            NavigationType.outer == widget.navigationType ? false : true,
         actions: [
           IconButton(
               onPressed: () => tagsViewModel.gotToAddTags(context),
@@ -52,6 +61,11 @@ class _TagsState extends State<Tags> {
                   var tagData = state.data.tags![index];
                   return Card(
                     child: ListTile(
+                      onTap: () {
+                        NavigationType.outer == widget.navigationType
+                            ? null
+                            : AutoRouter.of(context).maybePop<Tag>(tagData);
+                      },
                       leading: '${index + 1}'.text.size(16.sp).make(),
                       title: tagData.title!.text.size(16.sp).make(),
                       trailing: SizedBox(

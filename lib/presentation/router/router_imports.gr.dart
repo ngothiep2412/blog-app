@@ -9,6 +9,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i14;
+import 'package:blog_app/presentation/enums/navigation_type.dart' as _i18;
 import 'package:blog_app/presentation/screens/auth/auth_imports.dart' as _i3;
 import 'package:blog_app/presentation/screens/auth/login/login_imports.dart'
     as _i7;
@@ -27,7 +28,7 @@ import 'package:blog_app/presentation/screens/general/general_imports.dart'
 import 'package:blog_app/presentation/screens/general/home/home_imports.dart'
     as _i6;
 import 'package:blog_app/presentation/screens/general/home/home_model.dart'
-    as _i18;
+    as _i19;
 import 'package:blog_app/presentation/screens/general/tags/add_tags/add_tags_imports.dart'
     as _i2;
 import 'package:blog_app/presentation/screens/general/tags/tags_imports.dart'
@@ -66,9 +67,13 @@ abstract class $AppRouter extends _i14.RootStackRouter {
       );
     },
     CategoriesRoute.name: (routeData) {
-      return _i14.AutoRoutePage<dynamic>(
+      final args = routeData.argsAs<CategoriesRouteArgs>();
+      return _i14.AutoRoutePage<_i15.Category>(
         routeData: routeData,
-        child: const _i4.Categories(),
+        child: _i4.Categories(
+          key: args.key,
+          navigationType: args.navigationType,
+        ),
       );
     },
     GeneralRoute.name: (routeData) {
@@ -113,9 +118,13 @@ abstract class $AppRouter extends _i14.RootStackRouter {
       );
     },
     TagsRoute.name: (routeData) {
-      return _i14.AutoRoutePage<dynamic>(
+      final args = routeData.argsAs<TagsRouteArgs>();
+      return _i14.AutoRoutePage<_i16.Tag>(
         routeData: routeData,
-        child: const _i11.Tags(),
+        child: _i11.Tags(
+          key: args.key,
+          navigationType: args.navigationType,
+        ),
       );
     },
     UpdateCategoriesRoute.name: (routeData) {
@@ -185,16 +194,40 @@ class AuthRoute extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.Categories]
-class CategoriesRoute extends _i14.PageRouteInfo<void> {
-  const CategoriesRoute({List<_i14.PageRouteInfo>? children})
-      : super(
+class CategoriesRoute extends _i14.PageRouteInfo<CategoriesRouteArgs> {
+  CategoriesRoute({
+    _i17.Key? key,
+    required _i18.NavigationType navigationType,
+    List<_i14.PageRouteInfo>? children,
+  }) : super(
           CategoriesRoute.name,
+          args: CategoriesRouteArgs(
+            key: key,
+            navigationType: navigationType,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'CategoriesRoute';
 
-  static const _i14.PageInfo<void> page = _i14.PageInfo<void>(name);
+  static const _i14.PageInfo<CategoriesRouteArgs> page =
+      _i14.PageInfo<CategoriesRouteArgs>(name);
+}
+
+class CategoriesRouteArgs {
+  const CategoriesRouteArgs({
+    this.key,
+    required this.navigationType,
+  });
+
+  final _i17.Key? key;
+
+  final _i18.NavigationType navigationType;
+
+  @override
+  String toString() {
+    return 'CategoriesRouteArgs{key: $key, navigationType: $navigationType}';
+  }
 }
 
 /// generated route for
@@ -216,7 +249,7 @@ class GeneralRoute extends _i14.PageRouteInfo<void> {
 class HomeDetailsRoute extends _i14.PageRouteInfo<HomeDetailsRouteArgs> {
   HomeDetailsRoute({
     _i17.Key? key,
-    required _i18.Post post,
+    required _i19.Post post,
     required String imagePath,
     List<_i14.PageRouteInfo>? children,
   }) : super(
@@ -244,7 +277,7 @@ class HomeDetailsRouteArgs {
 
   final _i17.Key? key;
 
-  final _i18.Post post;
+  final _i19.Post post;
 
   final String imagePath;
 
@@ -312,16 +345,40 @@ class SplashRoute extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i11.Tags]
-class TagsRoute extends _i14.PageRouteInfo<void> {
-  const TagsRoute({List<_i14.PageRouteInfo>? children})
-      : super(
+class TagsRoute extends _i14.PageRouteInfo<TagsRouteArgs> {
+  TagsRoute({
+    _i17.Key? key,
+    required _i18.NavigationType navigationType,
+    List<_i14.PageRouteInfo>? children,
+  }) : super(
           TagsRoute.name,
+          args: TagsRouteArgs(
+            key: key,
+            navigationType: navigationType,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'TagsRoute';
 
-  static const _i14.PageInfo<void> page = _i14.PageInfo<void>(name);
+  static const _i14.PageInfo<TagsRouteArgs> page =
+      _i14.PageInfo<TagsRouteArgs>(name);
+}
+
+class TagsRouteArgs {
+  const TagsRouteArgs({
+    this.key,
+    required this.navigationType,
+  });
+
+  final _i17.Key? key;
+
+  final _i18.NavigationType navigationType;
+
+  @override
+  String toString() {
+    return 'TagsRouteArgs{key: $key, navigationType: $navigationType}';
+  }
 }
 
 /// generated route for

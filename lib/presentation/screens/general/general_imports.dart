@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:blog_app/core/constants/my_colors.dart';
+import 'package:blog_app/presentation/enums/navigation_type.dart';
 import 'package:blog_app/presentation/screens/general/add_posts/add_posts_imports.dart';
 import 'package:blog_app/presentation/screens/general/categories/categories_imports.dart';
 import 'package:blog_app/presentation/screens/general/home/home_imports.dart';

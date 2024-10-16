@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:blog_app/core/constants/my_colors.dart';
 import 'package:blog_app/data/repositories/repository.dart';
+import 'package:blog_app/presentation/enums/navigation_type.dart';
 import 'package:blog_app/presentation/router/router_imports.gr.dart';
 import 'package:blog_app/presentation/screens/general/categories/categories_model.dart';
 import 'package:feather_icons/feather_icons.dart';

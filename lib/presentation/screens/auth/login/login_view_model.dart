@@ -19,7 +19,7 @@ class LoginViewModel {
         .userLogin(emailController.text, passwordController.text, context);
     if (loginData.accessToken != null) {
       Utils.saveToken(loginData.accessToken.toString());
-      AutoRouter.of(context).push(const GeneralRoute());
+      AutoRouter.of(context).replace(const GeneralRoute());
     }
 
     isLoadingBloc.onUpdateData(false);

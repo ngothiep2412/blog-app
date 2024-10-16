@@ -10,6 +10,13 @@ class Onboard extends StatefulWidget {
 
 class _OnboardState extends State<Onboard> {
   OnboardViewModel viewModel = OnboardViewModel();
+
+  @override
+  void dispose() {
+    viewModel.pageController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

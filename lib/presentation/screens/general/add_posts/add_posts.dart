@@ -8,7 +8,21 @@ class AddPosts extends StatefulWidget {
 }
 
 class _AddPostsState extends State<AddPosts> {
-  final QuillController _controller = QuillController.basic();
+  late AddPostsViewModel addPostsViewModel;
+
+  @override
+  void initState() {
+    addPostsViewModel =
+        AddPostsViewModel(repository: context.read<Repository>());
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    addPostsViewModel.controller.dispose();
+    addPostsViewModel.textEditingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,34 +30,65 @@ class _AddPostsState extends State<AddPosts> {
       appBar: AppBar(
         backgroundColor: MyColors.primaryColor,
         automaticallyImplyLeading: false,
-        title: "Add Posts".text.make(),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: "Add Posts".text.white.make(),
         actions: [
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                FeatherIcons.check,
-              ))
+          BlocBuilder<VelocityBloc<bool>, VelocityState<bool>>(
+            bloc: addPostsViewModel.isLoadingBloc,
+            builder: (context, state) {
+              return IconButton(
+                onPressed: () => addPostsViewModel.addPost(
+                  context,
+                  context
+                      .read<VelocityBloc<ProfileModel>>()
+                      .state
+                      .data
+                      .userDetails!
+                      .id
+                      .toString(),
+                ),
+                icon: state.data == true
+                    ? const CircularProgressIndicator.adaptive(
+                        backgroundColor: Colors.white,
+                      )
+                    : const Icon(
+                        FeatherIcons.check,
+                      ),
+              );
+            },
+          )
         ],
       ),
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 24.w),
         children: [
           20.h.heightBox,
-          Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              Image.asset(
-                MyAssets.assetsImagesNetflix,
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  FeatherIcons.camera,
-                  color: MyColors.primaryColor,
-                ),
-              )
-            ],
-          ),
+          BlocBuilder<VelocityBloc<XFile?>, VelocityState<XFile?>>(
+              bloc: addPostsViewModel.selectedImageBloc,
+              builder: (context, state) {
+                return Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    state.data != null
+                        ? Image.file(
+                            File(state.data!.path),
+                            height: 250.h,
+                            width: 1.sw,
+                            fit: BoxFit.cover,
+                          ).cornerRadius(20.r)
+                        : Image.asset(
+                            MyAssets.assetsImagesNetflix,
+                          ).cornerRadius(20.r),
+                    IconButton(
+                      onPressed: () => addPostsViewModel.pickImage(context),
+                      icon: Icon(
+                        FeatherIcons.camera,
+                        color: MyColors.primaryColor,
+                      ),
+                    )
+                  ],
+                );
+              }),
           10.h.heightBox,
           VxTextField(
             fillColor: Colors.transparent,
@@ -51,6 +96,7 @@ class _AddPostsState extends State<AddPosts> {
             borderType: VxTextFieldBorderType.roundLine,
             borderRadius: 10.r,
             hint: "Title",
+            controller: addPostsViewModel.textEditingController,
           ),
           20.h.heightBox,
           VxTextField(
@@ -59,47 +105,83 @@ class _AddPostsState extends State<AddPosts> {
             borderType: VxTextFieldBorderType.roundLine,
             borderRadius: 10.r,
             hint: "Slug",
+            controller: addPostsViewModel.textEditingController,
           ),
           20.h.heightBox,
-          Container(
-            height: 60.h,
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10.r),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                "Tags".text.black.make(),
-                const Icon(
-                  FeatherIcons.chevronRight,
-                )
-              ],
-            ),
-          ),
+          BlocBuilder<VelocityBloc<Tag?>, VelocityState<Tag?>>(
+              bloc: addPostsViewModel.selectedTagBloc,
+              builder: (context, state) {
+                return InkWell(
+                  onTap: () async {
+                    var data = await AutoRouter.of(context).push<Tag>(
+                        TagsRoute(navigationType: NavigationType.inner));
+
+                    if (data != null) {
+                      log(data.title.toString());
+                      addPostsViewModel.selectedTagBloc.onUpdateData(data);
+                    }
+                  },
+                  child: Container(
+                    height: 60.h,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        state.data != null
+                            ? state.data!.title!.text.black.make()
+                            : "Tags".text.black.make(),
+                        const Icon(
+                          FeatherIcons.chevronRight,
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }),
           20.h.heightBox,
-          Container(
-            height: 60.h,
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10.r),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                "Categories".text.make(),
-                const Icon(
-                  FeatherIcons.chevronRight,
-                )
-              ],
-            ),
-          ),
+          BlocBuilder<VelocityBloc<Category?>, VelocityState<Category?>>(
+              bloc: addPostsViewModel.selectedCategoriesBloc,
+              builder: (context, state) {
+                return InkWell(
+                  onTap: () async {
+                    var data = await AutoRouter.of(context).push<Category>(
+                        CategoriesRoute(navigationType: NavigationType.inner));
+
+                    if (data != null) {
+                      log(data.title.toString());
+                      addPostsViewModel.selectedCategoriesBloc
+                          .onUpdateData(data);
+                    }
+                  },
+                  child: Container(
+                    height: 60.h,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.r),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        state.data != null
+                            ? state.data!.title!.text.black.make()
+                            : "Categories".text.black.make(),
+                        const Icon(
+                          FeatherIcons.chevronRight,
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }),
           20.h.heightBox,
           QuillToolbar.simple(
             configurations: QuillSimpleToolbarConfigurations(
-              controller: _controller,
+              controller: addPostsViewModel.controller,
               sharedConfigurations: const QuillSharedConfigurations(),
             ),
           ),
@@ -107,7 +189,7 @@ class _AddPostsState extends State<AddPosts> {
             height: 500.h,
             child: QuillEditor.basic(
               configurations: QuillEditorConfigurations(
-                controller: _controller,
+                controller: addPostsViewModel.controller,
               ),
             ),
           ),

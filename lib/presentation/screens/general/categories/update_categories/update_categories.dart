@@ -27,6 +27,12 @@ class _UpdateCategoriesState extends State<UpdateCategories> {
   }
 
   @override
+  void dispose() {
+    updateCategoriesViewModel.textController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

@@ -1,8 +1,13 @@
 part of 'categories_imports.dart';
 
-@RoutePage()
+@RoutePage<Category>()
 class Categories extends StatefulWidget {
-  const Categories({super.key});
+  const Categories({
+    super.key,
+    required this.navigationType,
+  });
+
+  final NavigationType navigationType;
 
   @override
   State<Categories> createState() => _CategoriesState();
@@ -26,7 +31,8 @@ class _CategoriesState extends State<Categories> {
         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: MyColors.primaryColor,
         title: "Categories".text.size(16.sp).bold.white.make(),
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading:
+            NavigationType.outer == widget.navigationType ? false : true,
         actions: [
           IconButton(
             onPressed: () => categoriesViewModel.goToAddCategories(context),
@@ -52,20 +58,22 @@ class _CategoriesState extends State<Categories> {
                       height: 20.h,
                     ),
                 itemBuilder: (context, index) {
-                  var latestCategories = state.data.categories![index];
+                  var categoryData = state.data.categories![index];
                   return Card(
                     child: ListTile(
+                      onTap: () => NavigationType.outer == widget.navigationType
+                          ? null
+                          : AutoRouter.of(context)
+                              .maybePop<Category>(categoryData),
                       leading: '${index + 1}'.text.size(16.sp).make(),
-                      title:
-                          "${latestCategories.title}".text.size(16.sp).make(),
+                      title: "${categoryData.title}".text.size(16.sp).make(),
                       trailing: SizedBox(
                         width: 100.w,
                         child: Row(
                           children: [
                             IconButton(
-                              onPressed: () =>
-                                  categoriesViewModel.goToUpdateCategories(
-                                      context, latestCategories),
+                              onPressed: () => categoriesViewModel
+                                  .goToUpdateCategories(context, categoryData),
                               icon: const Icon(
                                 color: Colors.green,
                                 FeatherIcons.edit,
@@ -74,7 +82,7 @@ class _CategoriesState extends State<Categories> {
                             IconButton(
                               onPressed: () =>
                                   categoriesViewModel.deleteCategories(
-                                      latestCategories.id.toString(), index),
+                                      categoryData.id.toString(), index),
                               icon: const Icon(
                                 color: Colors.red,
                                 FeatherIcons.trash,

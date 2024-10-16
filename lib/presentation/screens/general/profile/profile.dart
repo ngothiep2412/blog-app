@@ -13,7 +13,7 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     profileViewModel = ProfileViewModel(repository: context.read<Repository>());
-    profileViewModel.getUserProfileData();
+    profileViewModel.getUserProfileData(context);
     super.initState();
   }
 
@@ -44,12 +44,12 @@ class _ProfileState extends State<Profile> {
             );
           } else if (state is VelocityUpdateState) {
             return RefreshIndicator.adaptive(
-              onRefresh: () => profileViewModel.getUserProfileData(),
+              onRefresh: () => profileViewModel.getUserProfileData(context),
               child: ListView(
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 500.h,
+                    height: 400.h,
                     decoration: BoxDecoration(
                       color: MyColors.primaryColor,
                       borderRadius: BorderRadius.only(
@@ -152,17 +152,24 @@ class _ProfileState extends State<Profile> {
                               crossAxisCount: 2,
                               crossAxisSpacing: 10,
                               mainAxisSpacing: 13,
-                              childAspectRatio: 0.9,
+                              childAspectRatio: 0.5,
                             ),
                             itemBuilder: (context, index) {
                               var myPost = state.data.posts![index];
                               var imagePath = myPost.featuredimage
                                   .toString()
-                                  .replaceAll('public', 'storage');
+                                  .prepend("https://techblog.codersangam.com/")
+                                  .replaceAll("public", "storage");
+
                               return Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
-                                  CachedImageWidget(imgUrl: imagePath)
-                                      .cornerRadius(10.r),
+                                  CachedImageWidget(
+                                    imgUrl: imagePath,
+                                    // imgHeight: 80.h,
+                                    imgWidth: 1.sw,
+                                    boxFit: BoxFit.cover,
+                                  ).cornerRadius(10.r),
                                   6.h.heightBox,
                                   Row(
                                     children: [
@@ -174,12 +181,28 @@ class _ProfileState extends State<Profile> {
                                         ),
                                       ),
                                     ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Icon(
+                                        FeatherIcons.clock,
+                                      ),
+                                      8.horizontalSpace,
+                                      myPost.createdAt!
+                                          .timeAgo()
+                                          .text
+                                          .align(TextAlign.end)
+                                          .make(),
+                                    ],
                                   )
                                 ],
                               );
                             },
                           ),
-                        )
+                        ),
+                        200.heightBox,
                       ],
                     ),
                   ),

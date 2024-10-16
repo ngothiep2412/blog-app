@@ -25,7 +25,7 @@ class RegisterViewModel {
     );
     if (registerData.accessToken != null) {
       Utils.saveToken(registerData.accessToken.toString());
-      AutoRouter.of(context).push(const GeneralRoute());
+      AutoRouter.of(context).replace(const GeneralRoute());
     }
     isLoadingBloc.onUpdateData(false);
   }

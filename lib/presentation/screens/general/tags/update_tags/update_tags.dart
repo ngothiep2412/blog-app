@@ -23,6 +23,12 @@ class _UpdateTagsState extends State<UpdateTags> {
   }
 
   @override
+  void dispose() {
+    updateTagsViewModel.textController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

@@ -32,6 +32,37 @@ class _HomeState extends State<Home> {
               return SingleChildScrollView(
                 child: Column(
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        "Hello ${context.read<VelocityBloc<ProfileModel>>().state.data.userDetails!.name}"
+                            .text
+                            .bold
+                            .xl
+                            .make(),
+                        Container(
+                          width: 60.w,
+                          height: 60.h,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: CachedNetworkImageProvider(
+                                //  context
+                                //     .read<VelocityBloc<ProfileModel>>()
+                                //     .state
+                                //     .data
+                                //     .userDetails!
+                                //     .profilePhotoUrl
+                                // .toString(),
+                                "https://static.wikia.nocookie.net/bach-khoa-the-gioi-toan-thu/images/e/e4/Son_goku.png/revision/latest?cb=20211030082932",
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ).pSymmetric(h: 16.h),
+                    40.verticalSpace,
                     VxSwiper.builder(
                       autoPlay: true,
                       enableInfiniteScroll: true,
